@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+	table, th, td{
+		border: 1px solid;
+		border-collapse: collapse;
+		text-align: left;
+	}
+</style>
+<body>
+	<h3><%=pCode%>, <%=cCode%>, <%=code%></h3>
+	<%var src = "/score/"+pCode+"/"+cCode+"/"+code%>
+	<table style="width:100%"><tr>
+	
+	<td>
+	<form id="f" method="post" action=<%=src%>>
+		<select multiple style="width:100%;height:100%" name="id">
+			<option  value="" selected>[Select]</option>
+			<%for (var i of result){%>
+			<option  value=<%=i.userID%>>
+			<%var arr = i.class%>
+			<%var temp = arr.find(n => n.pCode==pCode && n.cCode==cCode && n.code==code)%>
+			<%var s = temp.score%>
+			<%=i.userID%>, <%=i.lName%> <%=i.fName%>, score: <%=s%>
+			</option>
+			<%}%>
+		</select>
+	</form>
+	</td>
+	
+	<td style="text-align: center">
+		<select name="score" form="f">
+		<option value="A+">A+</option>
+		<option value="A">A</option>
+		<option value="A-">A-</option>
+		<option value="B+">B+</option>
+		<option value="B">B</option>
+		<option value="B-">B-</option>
+		<option value="C+">C+</option>
+		<option value="C">C</option>
+		<option value="C-">C-</option>
+		</select>
+		<input type="submit" value="comfirm" form="f">
+	</td>
+	
+	</tr></table>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+    }
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    input[type="submit"] {
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        padding: 6px 8px;
+        margin: 6px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background-color 0.3s ease;
+    }
+    input[name="back"]{
+        background-color: red;
+    }
+        input[type="text"], select {
+        width: 100%;
+        padding: 6px; 
+        margin: 4px 0; 
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 12px; 
+    }
+    form {
+        background: #fff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+</style>
+<body>
+	<table style="width:100%"><tr>
+			<td style="width:auto">
+			<h2>Existing Program:</h2>
+			<iframe src="/readProgram" style="width:100%" height="250px"></iframe>
+			</td>
+			<td style="width:auto">
+			<h2>Available Teacher:</h2>
+			<iframe src="/readTeacher" style="width:100%" height="250px"></iframe>
+			</td>
+	</tr></table><br>
+	
+	<h2>Create Program</h2>
+	<form action='/createProgram' method="post">
+		Program Code:
+		<input type="text" name="code" required>
+		Program Name:
+		<input type="text" name="name" required>
+		Teacher ID:
+		<select name="id">
+		
+		<%if (readT!=null){for (var obj of readT){%>
+			<option value=<%=obj.userID%>><%=obj.userID%></option>
+		<%}}%>
+		</select>
+		<input type="submit" value="Create">
+	</form><br>
+	
+	<h2>Change Program Leader</h2>
+	<form action="/changeProgramLeader" method="post">
+		Program Code:
+		<input type="text" name="code" required>
+		Teacher ID:
+		<select name="id">
+		
+		<%if (readT!=null){for (var obj of readT){%>
+			<option value=<%=obj.userID%>><%=obj.userID%></option>
+		<%}}%>
+		</select>
+		<input type="submit" value="Delete">
+	</form>
+	
+	<form action='/' method='get'>
+		<input type="submit" value="Back" name="back">
+	</form>
+</body>
+</html>

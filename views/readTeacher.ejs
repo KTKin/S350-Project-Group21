@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<style>
+	table, th, td{
+		border: 1px solid;
+		border-collapse: collapse;
+		text-align: left;
+		padding: 0px 5px;
+	}
+</style>
+<body>
+	<table style="width:100%">
+	<tr><th style="width:35%">ID</th><th style="width:65%">Name</th></tr>
+	
+	<%if (result != null) { for (var i of result){%>
+		<tr><td><%=i.userID%></td><td><%=i.lName+" "+i.fName%></td></tr>
+	<%}}%>
+	</table>
+</body>
+</html>
