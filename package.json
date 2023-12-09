@@ -1,7 +1,7 @@
 {
     "name": "server",
-    "description": "Student Record System",
-    "author": "Group 26",
+    "description": "s350f Project",
+    "author": "Group 21",
     "version": "0.0.1",
     "dependencies": {
         "express": "*",
