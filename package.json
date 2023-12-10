@@ -9,10 +9,10 @@
         "mongodb": "*",
         "cookie-session": "*",
         "body-parser": "*",
-        "nodemon": "*"
+        "node": "*"
     },
     "engine": "node >= 0.10.0",
     "scripts": {
-        "start": "nodemon server"
+        "start": "node server"
     }
 }
