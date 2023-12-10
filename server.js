@@ -271,8 +271,9 @@ app.get('/readProgram', async (req, res) => {
 
 app.get('/AdminreadTeacher', async (req, res) => {
 	await client.connect();
-	res.status(200).render('readTeacher',{'result':readT});
+	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 	await client.close();
+	res.status(200).render('readTeacher',{'result':readT});
 });
 
 app.post('/createProgram', async (req, res) => {
@@ -357,17 +358,26 @@ app.get('/Course', async (req, res) => {
 			var Program = await program.findOne({leader:req.session.username});
 			var name = Program.name;
 			req.session.pCode = Program.code
-			req.session.readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
-			req.session.readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
-			res.status(200).render('Course',{name:name,readT:req.session.readT});
+			var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+			res.status(200).render('Course',{name:name,readT:readT});
 		}
 	}finally{
 		await client.close();
 	}
 });
-app.get('/readCourse',  (req, res) => {
-	res.status(200).render('readCourse',{'result':req.session.readC});
+app.get('/readCourse', async (req, res) => {
+	await client.connect();
+	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
+	await client.close();
+	res.status(200).render('readCourse',{'result':readC});
 });
+app.get('/PLreadTeacher', async (req, res) => {
+	await client.connect();
+	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+	await client.close();
+	res.status(200).render('readTeacher',{'result':readT});
+});
+
 app.post('/createCourse', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
@@ -448,17 +458,26 @@ app.get('/Class', async (req, res) => {
 			var name = Course.name;
 			req.session.pCode = Course.pCode
 			req.session.cCode = Course.code
-			req.session.readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
-			req.session.readT = await teacher.find({teaching:{$lt:3}}).sort({userID:1}).toArray();
-			res.status(200).render('Class',{name:name,readT:req.session.readT});
+			var readT = await teacher.find({teaching:{$lt:3}}).sort({userID:1}).toArray();
+			res.status(200).render('Class',{name:name,readT:readT});
 		}
 	}finally{
 		await client.close();
 	}
 });
 app.get('/readClass',  (req, res) => {
-	res.status(200).render('readClass',{'result':req.session.readCL});
+	await client.connect();
+	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
+	await client.close();
+	res.status(200).render('readClass',{'result':readCL});
 });
+app.get('/CLreadTeacher', async (req, res) => {
+	await client.connect();
+	var readT = await teacher.find({teaching:{$lt:3}}).sort({userID:1}).toArray();
+	await client.close();
+	res.status(200).render('readTeacher',{'result':readT});
+});
+
 app.post('/createClass', async(req, res) => {
 	await client.connect();
 	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
@@ -512,9 +531,9 @@ app.get('/Enroll', async(req, res) => {
 			var name = Course.name;
 			req.session.pCode = Course.pCode
 			req.session.cCode = Course.code
-			req.session.readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
-			req.session.readS = await student.find({program:Course.pCode,'class.cCode':{$ne:Course.code}}).sort({userID:1}).toArray();
-			res.status(200).render('Enroll',{name:name,readCL:req.session.readCL,readS:req.session.readS});
+			var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
+			var readS = await student.find({program:Course.pCode,'class.cCode':{$ne:Course.code}}).sort({userID:1}).toArray();
+			res.status(200).render('Enroll',{name:name,readCL:readCL,readS:readS});
 		}
 	}finally{
 		await client.close();
@@ -553,9 +572,9 @@ try{
 app.get('/viewStudent', async (req, res) => {
 	try{
 		await client.connect();
-		req.session.readCL = await cl.find({teacher:req.session.username}).sort({code:1}).toArray();
+		var readCL = await cl.find({teacher:req.session.username}).sort({code:1}).toArray();
 	}finally{
-		res.status(200).render('viewStudent',{readCL:req.session.readCL});
+		res.status(200).render('viewStudent',{readCL:readCL});
 	}
 });
 app.get('/viewStudent/:pC/:cC/:c', async (req, res) => {
