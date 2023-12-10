@@ -554,11 +554,7 @@ app.get('/viewStudent/:pC/:cC/:c', async (req, res) => {
 	var pCode = req.params.pC;
 	var cCode = req.params.cC;
 	var code = req.params.c;
-	var doc = {
-		"class.$[].pCode":pCode,
-		"class.$[].cCode":cCode,
-		"class.$[].code":code
-	};
+	var doc = {class:{$elemMatch:{'pCode':pCode,'cCode':cCode,'code':code}}};
 	await client.connect();
 	var result = await student.find(doc).sort({userID:1}).toArray();
 	res.status(200).render('viewing',{result:result,pCode:pCode,cCode:cCode,code:code});
