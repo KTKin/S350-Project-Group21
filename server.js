@@ -533,8 +533,8 @@ try{
 		for (var s of st){
 			await student.updateOne({userID:s},doc);
 			await cl.updateOne({code:CL},{$inc:{count:1}});
-			res.redirect('/Enroll');
 		}
+		res.redirect('/Enroll');
 	}
 }finally{
 	await client.close();
