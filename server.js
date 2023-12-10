@@ -555,9 +555,9 @@ app.get('/viewStudent/:pC/:cC/:c', async (req, res) => {
 	var cCode = req.params.cC;
 	var code = req.params.c;
 	var doc = {
-		"class.pCode":pCode,
-		"class.cCode":cCode,
-		"class.code":code
+		"class.$[].pCode":pCode,
+		"class.$[].cCode":cCode,
+		"class.$[].code":code
 	};
 	await client.connect();
 	var result = await student.find(doc).sort({userID:1}).toArray();
@@ -581,9 +581,9 @@ app.post('/score/:pC/:cC/:c', async(req, res) => {
 			if (st == ""){
 			}else{
 				var find = {userID:st,
-					'class.pCode':pC,
-					'class.cCode':cC,
-					'class.code':c
+					'class.$[].pCode':pC,
+					'class.$[].cCode':cC,
+					'class.$[].code':c
 				};
 				var doc = {$set:{'class.$.score':req.body.score}};
 				await student.updateOne(find,doc);
