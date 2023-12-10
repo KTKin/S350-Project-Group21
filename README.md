@@ -14,23 +14,54 @@ For Windows users:
 ```
 
 ## Getting Start
-Here will provide some account for testing.
+Here will provide some account for testing.<br />
+### Admin
+Username :<br />
 ```
-- Admin -> Username : `admin01` & Password : `admin01`
+admin01 
 ```
-You can register a new account by using admin account or you can use the account provided below.<br>
-The default password for every account is "HKMU" + Username.
-If your username is "s123456", the password will be "HKMUs123456".
-
+Password :<br />
 ```
-- Program Leader -> Username : `t123456` & Password : `HKMUt123456`
+admin01
 ```
+You can register a new account by using admin account.<br />
+The default password for every account is "HKMU" + Username.<br />
+If your username is "s123456", the password will be "HKMUs123456".<br />
+OR<br />
+You can use the account provided below.<br />
+### Program Leader
+Username :<br />
 ```
-- Course Leader -> Username : `t456789` & Password : `HKMUt456789`
+t123456
 ```
+Password :<br />
 ```
-- Teacher -> Username : `t555555` & Password : `HKMUt555555`
+HKMUt123456
 ```
+### Course Leader
+Username :<br />
 ```
-- Student -> Username : `s123456` & Password : `HKMUs123456`
+t456789
+```
+Password :<br />
+```
+HKMUt456789
+```
+### Teacher
+Username :<br />
+```
+t555555
+```
+Password :<br />
+```
+HKMUt555555
+```
+### Student
+Username :<br />
+```
+s123456
+```
+Password :<br />
+```
+HKMUs123456
 ```
