@@ -312,7 +312,9 @@ app.post('/createProgram', async (req, res) => {
 
 app.post('/changeProgramLeader', async (req, res) => {
 	var checkC = false;
-	for (var i of req.session.readP){
+	await client.connect();
+	var readP = await program.find().sort({code:1}).toArray();
+	for (var i of readP){
 		if (req.body.code == i.code){
 			checkC = true;
 			break;
@@ -320,7 +322,6 @@ app.post('/changeProgramLeader', async (req, res) => {
 	}
 	if (checkC) {
 		try{
-			await client.connect();
 			var Program = await program.findOne({code:req.body.code});
 			var oldL = Program.leader;
 			await teacher.updateOne({userID:oldL},{$set:{programleader:false}});
