@@ -474,18 +474,21 @@ app.post('/createClass', async(req, res) => {
 });
 app.post('/deleteClass', async(req, res) => {
 	var l = req.session.readCL.length;
-	var code = 'CL'+l;
-	var id = req.session.readCL[l-1].teacher;
-	var pC = req.session.pCode;
-	var cC = req.session.cCode;
-	try{
-		await client.connect();
-		await cl.deleteOne({'code':code});
-		await teacher.updateOne({userID:id},{$inc:{teaching:-1}});
-		await student.updateMany({},{$pull:{class:{pCode:pC,cCode:cC,code:code}}});
-	}finally{
-		await client.close();
-		res.redirect('/Class');
+	if (l == 0){
+	} else {
+		var code = 'CL'+l;
+		var id = req.session.readCL[l-1].teacher;
+		var pC = req.session.pCode;
+		var cC = req.session.cCode;
+		try{
+			await client.connect();
+			await cl.deleteOne({'code':code});
+			await teacher.updateOne({userID:id},{$inc:{teaching:-1}});
+			await student.updateMany({},{$pull:{class:{pCode:pC,cCode:cC,code:code}}});
+		}finally{
+			await client.close();
+			res.redirect('/Class');
+		}
 	}
 });
 app.get('/Enroll', async(req, res) => {
