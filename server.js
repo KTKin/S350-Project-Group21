@@ -252,7 +252,7 @@ app.get('/Program', async (req, res) => {
 	if (req.session.position == "admin"){
 		try{
 			await client.connect();
-			req.session.readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+			var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 		} finally {
 			await client.close();
 		}
@@ -269,8 +269,10 @@ app.get('/readProgram', async (req, res) => {
 	res.status(200).render('readProgram',{'result':readP});
 });
 
-app.get('/readTeacher',  (req, res) => {
-	res.status(200).render('readTeacher',{'result':req.session.readT});
+app.get('/AdminreadTeacher', async (req, res) => {
+	await client.connect();
+	res.status(200).render('readTeacher',{'result':readT});
+	await client.close();
 });
 
 app.post('/createProgram', async (req, res) => {
