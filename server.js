@@ -526,6 +526,7 @@ try{
 	}else if(typeof st == 'string'){
 		await student.updateOne({userID:st},doc);
 		await cl.updateOne({code:CL},{$inc:{count:1}});
+		res.redirect('/Enroll');
 	} else if (st == null){
 		res.status(200).render('message',{message:"No Student"});
 	} else {
