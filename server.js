@@ -364,12 +364,15 @@ app.get('/readCourse',  (req, res) => {
 app.post('/createCourse', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
-	for (var i of req.session.readC){
+	await client.connect();
+	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
+	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+	for (var i of readC){
 		if (req.body.code == i.code || req.body.name == i.name){
 			checkCN = false;
 		}
 	}
-	for (var j of req.session.readT){
+	for (var j of readT){
 		if (req.body.id == j.userID){
 			checkT = true;
 			break;
@@ -392,21 +395,20 @@ app.post('/createCourse', async (req, res) => {
 			};
 			var find = {userID:req.body.id};
 			var query = {$set:{courseleader:true}};
-			await client.connect();
+
 			await course.insertOne(doc);
 			await teacher.updateOne(find,query);
 		} finally {
 			await client.close();
-			req.session.readC = null;
-			req.session.readT = null;
-			req.session.pCode = null;
 			res.redirect('/Course');
 		}
 	}
 });
 app.post('/changeCourseLeader', async (req, res) => {
 	var checkC = false;
-	for (var i of req.session.readC){
+	await client.connect();
+	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
+	for (var i of readC){
 		if (req.body.code == i.code){
 			checkC = true;
 			break;
@@ -414,7 +416,6 @@ app.post('/changeCourseLeader', async (req, res) => {
 	}
 	if (checkC) {
 		try{
-			await client.connect();
 			var Course = await course.findOne({code:req.body.code});
 			var oldL = Course.leader;
 			await teacher.updateOne({userID:oldL},{$set:{courseleader:false}});
@@ -422,9 +423,6 @@ app.post('/changeCourseLeader', async (req, res) => {
 			await course.updateOne({code:req.body.code},{$set:{leader:req.body.id}});
 		} finally {
 			await client.close();
-			req.session.readC = null;
-			req.session.readT = null;
-			req.session.pCode = null;
 			res.redirect('/Course');
 		}
 	} else {
