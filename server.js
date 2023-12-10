@@ -570,9 +570,9 @@ app.post('/score/:pC/:cC/:c', async(req, res) => {
 	if (req.body.id == ""){
 	}else if (typeof req.body.id == "string"){
 		var find = {userID:req.body.id,
-			'class.pCode':pC,
-			'class.cCode':cC,
-			'class.code':c
+			'class.$[].pCode':pC,
+			'class.$[].cCode':cC,
+			'class.$[].code':c
 		};
 		var doc = {$set:{'class.$.score':req.body.score}};
 		await student.updateOne(find,doc);
