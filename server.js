@@ -524,7 +524,7 @@ try{
 		res.status(200).render('message',{message:"No Class"});
 	}else if(typeof st == 'string'){
 		await student.updateOne({userID:st},doc);
-		await cl.updateOne({code:CL},{$inc:{count:1}});
+		await cl.updateOne({pCode:req.session.pCode,cCode:req.session.cCode,code:CL},{$inc:{count:1}});
 		res.redirect('/');
 	} else if (st == null){
 		res.status(200).render('message',{message:"No Student"});
