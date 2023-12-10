@@ -250,12 +250,8 @@ app.post('/registerTeacher', async (req, res) => {
 
 app.get('/Program', async (req, res) => {
 	if (req.session.position == "admin"){
-		try{
-			await client.connect();
-			var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
-		} finally {
-			await client.close();
-		}
+		await client.connect();
+		var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 		res.status(200).render('Program',{readT:req.session.readT});
 	} else {
 		res.status(200).render('message',{message:"You Are Not Admin"});
@@ -263,23 +259,18 @@ app.get('/Program', async (req, res) => {
 });
 
 app.get('/readProgram', async (req, res) => {
-	await client.connect();
 	var readP = await program.find().sort({code:1}).toArray();
-	await client.close();
 	res.status(200).render('readProgram',{'result':readP});
 });
 
 app.get('/AdminreadTeacher', async (req, res) => {
-	await client.connect();
 	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
-	await client.close();
 	res.status(200).render('readTeacher',{'result':readT});
 });
 
 app.post('/createProgram', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
-	await client.connect();
 	var readP = await program.find().sort({code:1}).toArray();
 	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 	for (var i of readP){
@@ -321,7 +312,6 @@ app.post('/createProgram', async (req, res) => {
 
 app.post('/changeProgramLeader', async (req, res) => {
 	var checkC = false;
-	await client.connect();
 	var readP = await program.find().sort({code:1}).toArray();
 	for (var i of readP){
 		if (req.body.code == i.code){
@@ -349,7 +339,6 @@ app.post('/changeProgramLeader', async (req, res) => {
 //------------------------------------teacher------------------------------------
 //------program leader
 app.get('/Course', async (req, res) => {
-	try{
 		await client.connect();
 		var checkPos = await teacher.findOne({userID:req.session.username});
 		if (checkPos.programleader!=true){
@@ -361,27 +350,19 @@ app.get('/Course', async (req, res) => {
 			var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 			res.status(200).render('Course',{name:name,readT:readT});
 		}
-	}finally{
-		await client.close();
-	}
 });
 app.get('/readCourse', async (req, res) => {
-	await client.connect();
 	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
-	await client.close();
 	res.status(200).render('readCourse',{'result':readC});
 });
 app.get('/PLreadTeacher', async (req, res) => {
-	await client.connect();
 	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
-	await client.close();
 	res.status(200).render('readTeacher',{'result':readT});
 });
 
 app.post('/createCourse', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
-	await client.connect();
 	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
 	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 	for (var i of readC){
@@ -423,7 +404,6 @@ app.post('/createCourse', async (req, res) => {
 });
 app.post('/changeCourseLeader', async (req, res) => {
 	var checkC = false;
-	await client.connect();
 	var readC = await course.find({pCode:req.session.pCode }).sort({code:1}).toArray();
 	for (var i of readC){
 		if (req.body.code == i.code){
@@ -448,7 +428,7 @@ app.post('/changeCourseLeader', async (req, res) => {
 });
 //------course leader
 app.get('/Class', async (req, res) => {
-	try{
+
 		await client.connect();
 		var checkPos = await teacher.findOne({userID:req.session.username});
 		if (checkPos.courseleader!=true){
@@ -461,25 +441,23 @@ app.get('/Class', async (req, res) => {
 			var readT = await teacher.find({teaching:{$lt:3}}).sort({userID:1}).toArray();
 			res.status(200).render('Class',{name:name,readT:readT});
 		}
-	}finally{
-		await client.close();
-	}
+
 });
 app.get('/readClass',  async (req, res) => {
-	await client.connect();
+
 	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
-	await client.close();
+
 	res.status(200).render('readClass',{'result':readCL});
 });
 app.get('/CLreadTeacher', async (req, res) => {
-	await client.connect();
+
 	var readT = await teacher.find({teaching:{$lt:3}}).sort({userID:1}).toArray();
-	await client.close();
+
 	res.status(200).render('readTeacher',{'result':readT});
 });
 
 app.post('/createClass', async(req, res) => {
-	await client.connect();
+
 	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
 	if (readCL.length >= 5){
 		res.status(200).render('message',{message:'Reach Limit(Max Class: 5)'});
@@ -501,7 +479,7 @@ app.post('/createClass', async(req, res) => {
 	}
 });
 app.post('/deleteClass', async(req, res) => {
-	await client.connect();
+
 	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
 	var l = readCL.length;
 	if (l == 0){
@@ -521,7 +499,6 @@ app.post('/deleteClass', async(req, res) => {
 	}
 });
 app.get('/Enroll', async(req, res) => {
-	try{
 		await client.connect();
 		var checkPos = await teacher.findOne({userID:req.session.username});
 		if (checkPos.courseleader!=true){
@@ -535,9 +512,6 @@ app.get('/Enroll', async(req, res) => {
 			var readS = await student.find({program:Course.pCode,'class.cCode':{$ne:Course.code}}).sort({userID:1}).toArray();
 			res.status(200).render('Enroll',{name:name,readCL:readCL,readS:readS});
 		}
-	}finally{
-		await client.close();
-	}
 });
 
 
@@ -546,7 +520,6 @@ try{
 	var CL = req.body.class;
 	var st = req.body.student;
 	var doc = {$push:{class:{pCode:req.session.pCode, cCode:req.session.cCode, code:CL, score:null}}};
-	await client.connect();
 	if(CL==null){
 		res.status(200).render('message',{message:"No Class"});
 	}else if(typeof st == 'string'){
