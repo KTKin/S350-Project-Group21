@@ -476,7 +476,7 @@ app.post('/deleteClass', async(req, res) => {
 	var l = req.session.readCL.length;
 	if (l == 0){
 	} else {
-		var code = 'CL';
+		var code = 'CL'+l;
 		var id = req.session.readCL[l-1].teacher;
 		var pC = req.session.pCode;
 		var cC = req.session.cCode;
