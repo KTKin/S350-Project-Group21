@@ -531,7 +531,7 @@ try{
 	}else if(typeof st == 'string'){
 		await student.updateOne({userID:st},doc);
 		await cl.updateOne({code:CL},{$inc:{count:1}});
-		res.redirect('/Enroll');
+		res.redirect('/');
 	} else if (st == null){
 		res.status(200).render('message',{message:"No Student"});
 	} else {
@@ -539,7 +539,7 @@ try{
 			await student.updateOne({userID:s},doc);
 			await cl.updateOne({code:CL},{$inc:{count:1}});
 		}
-		res.redirect('/Enroll');
+		res.redirect('/');
 	}
 }finally{
 	await client.close();
