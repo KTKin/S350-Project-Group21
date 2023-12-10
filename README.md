@@ -12,7 +12,7 @@ For Windows users:
 3. Type "npm install && npm start"
 4. Open browser and type in URL "localhost:3000/"
 ```
-Both methods to run the system share the same database
+Both methods to run the system share the same database.
 
 ## Getting Start
 Here will provide some account for testing.<br />
