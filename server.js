@@ -310,7 +310,6 @@ app.post('/createProgram', async (req, res) => {
 			await teacher.updateOne(find,query);
 		} finally {
 			await client.close();
-			req.session.readP = null;
 			req.session.readT = null;
 			res.redirect('/Program');
 		}
@@ -336,7 +335,6 @@ app.post('/changeProgramLeader', async (req, res) => {
 			await program.updateOne({code:req.body.code},{$set:{leader:req.body.id}});
 		} finally {
 			await client.close();
-			req.session.readP = null;
 			req.session.readT = null;
 			res.redirect('/Program');
 		}
