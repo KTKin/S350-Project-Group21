@@ -120,6 +120,11 @@ app.post('/getPW', async (req,res)=>{
 });
 //------------------------------------main------------------------------------
 app.get('/main', async (req, res) => {
+	if (req.session.authenticated == true) {
+		req.session.authenticated = true;
+		req.session.username = req.session.username
+		req.session.position = req.session.position
+	}
 	switch(req.session.position){
 		case "admin":
 			try{
