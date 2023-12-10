@@ -531,7 +531,7 @@ try{
 	} else {
 		for (var s of st){
 			await student.updateOne({userID:s},doc);
-			await cl.updateOne({code:CL},{$inc:{count:1}});
+			await cl.updateOne({pCode:req.session.pCode,cCode:req.session.cCode,code:CL},{$inc:{count:1}});
 		}
 		res.redirect('/');
 	}
