@@ -465,7 +465,7 @@ app.get('/Class', async (req, res) => {
 		await client.close();
 	}
 });
-app.get('/readClass',  (req, res) => {
+app.get('/readClass',  async (req, res) => {
 	await client.connect();
 	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
 	await client.close();
