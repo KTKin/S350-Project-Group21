@@ -252,28 +252,23 @@ app.get('/Program', async (req, res) => {
 	if (req.session.position == "admin"){
 		try{
 			await client.connect();
-			var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+			req.session.readP = await program.find().sort({code:1}).toArray();
+			req.session.readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 		} finally {
 			await client.close();
 		}
-		res.status(200).render('Program',{readT:readT});
+		res.status(200).render('Program',{readT:req.session.readT});
 	} else {
 		res.status(200).render('message',{message:"You Are Not Admin"});
 	}
 });
 
 app.get('/readProgram', (req, res) => {
-	await client.connect();
-	var readP = await program.find().sort({code:1}).toArray();
-	await client.close();
-	res.status(200).render('readProgram',{'result':readP});
+	res.status(200).render('readProgram',{'result':req.session.readP});
 });
 
 app.get('/readTeacher',  (req, res) => {
-	await client.connect();
-	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
-	await client.close();
-	res.status(200).render('readTeacher',{'result':readT});
+	res.status(200).render('readTeacher',{'result':req.session.readT});
 });
 
 app.post('/createProgram', async (req, res) => {
