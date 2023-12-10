@@ -454,14 +454,15 @@ app.get('/readClass',  (req, res) => {
 });
 app.post('/createClass', async(req, res) => {
 	await client.connect();
-	if (req.session.readCL.length >= 5){
+	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
+	if (readCL.length >= 5){
 		res.status(200).render('message',{message:'Reach Limit(Max Class: 5)'});
 	} else {
 		try{
 			var doc = {
 				pCode:req.session.pCode,
 				cCode:req.session.cCode,
-				code:"CL"+(req.session.readCL.length+1),
+				code:"CL"+(readCL.length+1),
 				teacher:req.body.id,
 				count:0
 			}
@@ -474,15 +475,16 @@ app.post('/createClass', async(req, res) => {
 	}
 });
 app.post('/deleteClass', async(req, res) => {
-	var l = req.session.readCL.length;
+	await client.connect();
+	var readCL = await cl.find({cCode:req.session.cCode }).sort({code:1}).toArray();
+	var l = readCL.length;
 	if (l == 0){
 	} else {
 		var code = 'CL'+l;
-		var id = req.session.readCL[l-1].teacher;
+		var id = readCL[l-1].teacher;
 		var pC = req.session.pCode;
 		var cC = req.session.cCode;
 		try{
-			await client.connect();
 			await cl.deleteOne({'pCode':pC,'cCode':cC,'code':code});
 			await teacher.updateOne({userID:id},{$inc:{teaching:-1}});
 			await student.updateMany({},{$pull:{class:{pCode:pC,cCode:cC,code:code}}});
