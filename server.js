@@ -565,14 +565,14 @@ app.post('/score/:pC/:cC/:c', async(req, res) => {
 	var c = req.params.c;
 	if (req.body.id == ""){
 	}else if (typeof req.body.id == "string"){
-		var find = {userID:req.body.id,class:{$elemMatch:{'pCode':pCode,'cCode':cCode,'code':code}}};
+		var find = {userID:req.body.id,class:{$elemMatch:{'pCode':pC,'cCode':cC,'code':c}}};
 		var doc = {$set:{'class.$.score':req.body.score}};
 		await student.updateOne(find,doc);
 	} else {
 		for (st of req.body.id){
 			if (st == ""){
 			}else{
-				var find = {userID:st,class:{$elemMatch:{'pCode':pCode,'cCode':cCode,'code':code}}};
+				var find = {userID:st,class:{$elemMatch:{'pCode':pC,'cCode':cC,'code':c}}};
 				var doc = {$set:{'class.$.score':req.body.score}};
 				await student.updateOne(find,doc);
 			}
