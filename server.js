@@ -269,12 +269,14 @@ app.get('/readTeacher',  (req, res) => {
 app.post('/createProgram', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
-	for (var i of req.session.readP){
+	var readP = await program.find().sort({code:1}).toArray();
+	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
+	for (var i of readP){
 		if (req.body.code == i.code || req.body.name == i.name){
 			checkCN = false;
 		}
 	}
-	for (var j of req.session.readT){
+	for (var j of readT){
 		if (req.body.id == j.userID){
 			checkT = true;
 			break;
