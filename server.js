@@ -11,7 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const session = require('cookie-session');
 app.use(session({
-	resave : false,
 	name : 'login-session',
 	keys : ['login passport']
 }));
