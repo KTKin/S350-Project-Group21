@@ -482,7 +482,7 @@ app.post('/deleteClass', async(req, res) => {
 		var cC = req.session.cCode;
 		try{
 			await client.connect();
-			await cl.deleteOne({'code':code});
+			await cl.deleteOne({'pCode':pC,'cCode':cC,'code':code});
 			await teacher.updateOne({userID:id},{$inc:{teaching:-1}});
 			await student.updateMany({},{$pull:{class:{pCode:pC,cCode:cC,code:code}}});
 		}finally{
