@@ -65,3 +65,5 @@ Password :<br />
 ```
 HKMUs123456
 ```
+## Reminder
+Just in case, if you get a message "Wrong Password" when logging in, click `Forgot Password` in login page to get the password.
