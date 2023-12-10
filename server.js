@@ -269,6 +269,7 @@ app.get('/readTeacher',  (req, res) => {
 app.post('/createProgram', async (req, res) => {
 	var checkCN = true;
 	var checkT = null;
+	await client.connect();
 	var readP = await program.find().sort({code:1}).toArray();
 	var readT = await teacher.find({programleader:false,courseleader:false}).sort({userID:1}).toArray();
 	for (var i of readP){
@@ -298,7 +299,6 @@ app.post('/createProgram', async (req, res) => {
 			};
 			var find = {userID:req.body.id};
 			var query = {$set:{programleader:true}};
-			await client.connect();
 			await program.insertOne(doc);
 			await teacher.updateOne(find,query);
 		} finally {
