@@ -545,9 +545,9 @@ try{
 app.get('/viewStudent', async (req, res) => {
 	try{
 		await client.connect();
-		var readCL = await cl.find({teacher:req.session.username}).sort({code:1}).toArray();
+		req.session.readCL = await cl.find({teacher:req.session.username}).sort({code:1}).toArray();
 	}finally{
-		res.status(200).render('viewStudent',{readCL:readCL});
+		res.status(200).render('viewStudent',{readCL:req.session.readCL});
 	}
 });
 app.get('/viewStudent/:pC/:cC/:c', async (req, res) => {
